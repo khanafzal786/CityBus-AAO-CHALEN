@@ -1,0 +1,23 @@
+{
+  "name": "citybus-aao-chalen",
+  "main": "cloudflare.entry.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./standalone-dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api", "/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "citybus-db",
+      "database_id": "2693f033-3ca8-441d-8f54-86b3ed9579fe",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "vars": {
+    "DEMO_MODE": "false"
+  }
+}
