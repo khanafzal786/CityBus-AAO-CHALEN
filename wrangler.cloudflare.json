@@ -17,7 +17,8 @@
       "migrations_dir": "drizzle"
     }
   ],
-  "vars": {
-    "DEMO_MODE": "false"
-  }
+ "vars": {
+  "DEMO_MODE": "false",
+  "PUBLIC_DEMO_DATA": "true"
+}
 }
