@@ -192,7 +192,8 @@ export async function handle(request: Request, env: any): Promise<Response> {
         fail(415, "JSON content type required");
     }
     const demo = env.DEMO_MODE === "true";
-    if (demo) await seed(db);
+    const demoData = demo || env.PUBLIC_DEMO_DATA === "true";
+    if (demoData) await seed(db);
     const rawCookie = request.headers
       .get("cookie")
       ?.match(/(?:^|;\s*)citybus_session=([^;]+)/)?.[1];
@@ -415,11 +416,11 @@ export async function handle(request: Request, env: any): Promise<Response> {
           "SELECT * FROM buses WHERE routeId=? AND status IN ('ON_ROUTE','ACTIVE','DELAYED')",
           r.id,
         );
-        r.etaMinutes = demo
+        r.etaMinutes = demoData
           ? 3 + (Number(r.id.replace("r", "")) || 0) * 3
           : null;
         r.stopCount = r.endOrder - r.startOrder + 1;
-        r.mode = demo ? "DEMO" : "NO_ETA";
+       r.mode = demoData ? "DEMO" : "NO_ETA";
       }
       if (user && rows.length)
         await insert("journeys", {
@@ -467,7 +468,7 @@ export async function handle(request: Request, env: any): Promise<Response> {
         next = stops[0],
         speed = 18,
         timestamp = bus.lastLocationUpdate;
-      if (!live && demo && stops.length > 1) {
+      if (!live && demoData && stops.length > 1) {
         const step =
             (Date.now() / 18000 +
               (Number(bus.id.replace("b", "")) || 0) * 0.43) %
